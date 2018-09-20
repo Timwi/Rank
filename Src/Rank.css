@@ -1,0 +1,37 @@
+html {
+    background: #eee;
+    margin: 0;
+    font-family: 'Work Sans', 'Trebuchet MS';
+}
+
+textarea, input, button {
+    font: inherit;
+}
+
+kbd {
+    font: inherit;
+    text-decoration: underline;
+}
+
+body {
+    max-width: 20cm;
+    margin: 0 auto;
+    padding: 1em 2em;
+    min-height: 100vh;
+    box-sizing: border-box;
+    background: white;
+    box-shadow: rgba(0, 0, 0, .4) 0 0 10px;
+}
+
+textarea {
+    width: 100%;
+    height: 20em;
+}
+
+input {
+    width: 100%;
+}
+
+li.incomplete {
+    color: #ccc;
+}
