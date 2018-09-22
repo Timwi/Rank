@@ -35,3 +35,7 @@ input {
 li.incomplete {
     color: #ccc;
 }
+
+div.comparison {
+    font-size: 200%;
+}

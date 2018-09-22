@@ -51,7 +51,11 @@ namespace Timwi.Rank
                 var set = ClassifyJson.DeserializeFile<RankSet>(filePath);
 
                 return HttpResponse.Html(new HTML(
-                    new HEAD(new TITLE("Rank"), new META { charset = "utf-8" }, new STYLELiteral(Resources.RankCss)),
+                    new HEAD(
+                        new TITLE("Rank"),
+                        new META { name = "viewport", content = "width=device-width,initial-scale=1.0" },
+                        new META { charset = "utf-8" },
+                        new STYLELiteral(Resources.RankCss)),
                     new BODY(
                         new H1(set.Name),
                         set.ListRankings.Count == 0 ? null : Ut.NewArray<object>(
@@ -92,7 +96,11 @@ namespace Timwi.Rank
                 var (ix1, ix2, ranked) = attemptRanking(ranking, set);
 
                 return HttpResponse.Html(new HTML(
-                    new HEAD(new TITLE("Rank"), new META { charset = "utf-8" }, new STYLELiteral(Resources.RankCss)),
+                    new HEAD(
+                        new TITLE("Rank"),
+                        new META { name = "viewport", content = "width=device-width,initial-scale=1.0" },
+                        new META { charset = "utf-8" },
+                        new STYLELiteral(Resources.RankCss)),
                     new BODY(
                         new H1(set.Name),
                         new H2(ranking.Title),
@@ -109,7 +117,11 @@ namespace Timwi.Rank
             }
 
             return HttpResponse.Html(new HTML(
-                new HEAD(new TITLE("Rank"), new META { charset = "utf-8" }, new STYLELiteral(Resources.RankCss)),
+                new HEAD(
+                    new TITLE("Rank"),
+                    new META { name = "viewport", content = "width=device-width,initial-scale=1.0" },
+                    new META { charset = "utf-8" },
+                    new STYLELiteral(Resources.RankCss)),
                 new BODY(
                     new FORM { action = req.Url.ToHref(), method = method.post }._(
                         new INPUT { type = itype.hidden, name = "fnc", value = "create" },
@@ -134,7 +146,7 @@ namespace Timwi.Rank
                     return 0;
                 var item = ranking.Comparisons.FirstOrDefault(rc => (rc.Less == i1 && rc.More == i2) || (rc.Less == i2 && rc.More == i1));
                 if (item != null)
-                    return item.Less == i1 ? -1 : 1;
+                    return item.Less == i1 ? 1 : -1;
                 if (ix1 == -1)
                 {
                     ix1 = i1;
