@@ -2,13 +2,14 @@
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using RT.PostBuild;
 using RT.PropellerApi;
+using RT.Serialization;
 using RT.Servers;
 using RT.TagSoup;
 using RT.Util;
 using RT.Util.Collections;
 using RT.Util.ExtensionMethods;
-using RT.Util.Serialization;
 
 namespace Timwi.Rank
 {
@@ -144,9 +145,11 @@ namespace Timwi.Rank
             {
                 if (i1 == i2)
                     return 0;
-                var item = ranking.Comparisons.FirstOrDefault(rc => (rc.Less == i1 && rc.More == i2) || (rc.Less == i2 && rc.More == i1));
-                if (item != null)
-                    return item.Less == i1 ? 1 : -1;
+                if (ranking.Comparisons.Contains(new RankComparison(i1, i2)))
+                    return 1;
+                if (ranking.Comparisons.Contains(new RankComparison(i2, i1)))
+                    return -1;
+
                 if (ix1 == -1)
                 {
                     ix1 = i1;
@@ -220,24 +223,16 @@ namespace Timwi.Rank
                         if (!int.TryParse(req.Post["ix1"].Value, out var ix1) || !int.TryParse(req.Post["ix2"].Value, out var ix2) || !int.TryParse(req.Post["more"].Value, out var more) || (more != ix1 && more != ix2))
                             return HttpResponse.PlainText("Invalid integers.", HttpStatusCode._404_NotFound);
 
-                        currentRanking.Comparisons.Add(new RankComparison { Less = more == ix1 ? ix2 : ix1, More = more == ix1 ? ix1 : ix2 });
+                        var newComparison = new RankComparison(more == ix1 ? ix2 : ix1, more == ix1 ? ix1 : ix2);
 
                         // Transitive closure
-                        keepGoing:
-                        for (int i = 0; i < currentRanking.Comparisons.Count; i++)
-                            for (int j = i + 1; j < currentRanking.Comparisons.Count; j++)
-                            {
-                                if (currentRanking.Comparisons[i].More == currentRanking.Comparisons[j].Less && !currentRanking.Comparisons.Any(c => c.Less == currentRanking.Comparisons[i].Less && c.More == currentRanking.Comparisons[j].More))
-                                {
-                                    currentRanking.Comparisons.Add(new RankComparison { Less = currentRanking.Comparisons[i].Less, More = currentRanking.Comparisons[j].More });
-                                    goto keepGoing;
-                                }
-                                if (currentRanking.Comparisons[j].More == currentRanking.Comparisons[i].Less && !currentRanking.Comparisons.Any(c => c.Less == currentRanking.Comparisons[j].Less && c.More == currentRanking.Comparisons[i].More))
-                                {
-                                    currentRanking.Comparisons.Add(new RankComparison { Less = currentRanking.Comparisons[j].Less, More = currentRanking.Comparisons[i].More });
-                                    goto keepGoing;
-                                }
-                            }
+                        var ancestorLesses = currentRanking.Comparisons.Where(c => c.More == newComparison.Less).Select(c => c.Less).ToList();
+                        ancestorLesses.Add(newComparison.Less);
+                        var descendantMores = currentRanking.Comparisons.Where(c => c.Less == newComparison.More).Select(c => c.More).ToList();
+                        descendantMores.Add(newComparison.More);
+                        for (int i = 0; i < ancestorLesses.Count; i++)
+                            for (int j = 0; j < descendantMores.Count; j++)
+                                currentRanking.Comparisons.Add(new RankComparison(ancestorLesses[i], descendantMores[j]));
 
                         var result = attemptRanking(currentRanking, currentSet);
                         if (result.ix1 == -1)

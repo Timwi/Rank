@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using RT.Serialization;
 using RT.Util;
 using RT.Util.Collections;
-using RT.Util.Serialization;
 
 namespace Timwi.Rank
 {

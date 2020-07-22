@@ -19,7 +19,7 @@ namespace Timwi.Rank {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -61,8 +61,41 @@ namespace Timwi.Rank {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ECHO is on.
-        ///.
+        ///   Looks up a localized string similar to html {
+        ///    background: #eee;
+        ///    margin: 0;
+        ///    font-family: &apos;Work Sans&apos;, &apos;Trebuchet MS&apos;;
+        ///}
+        ///
+        ///textarea, input, button {
+        ///    font: inherit;
+        ///}
+        ///
+        ///kbd {
+        ///    font: inherit;
+        ///    text-decoration: underline;
+        ///}
+        ///
+        ///body {
+        ///    max-width: 20cm;
+        ///    margin: 0 auto;
+        ///    padding: 1em 2em;
+        ///    min-height: 100vh;
+        ///    box-sizing: border-box;
+        ///    background: white;
+        ///    box-shadow: rgba(0, 0, 0, .4) 0 0 10px;
+        ///}
+        ///
+        ///textarea {
+        ///    width: 100%;
+        ///    height: 20em;
+        ///}
+        ///
+        ///input {
+        ///    width: 100%;
+        ///}
+        ///
+        ///li.incomp [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string RankCss {
             get {

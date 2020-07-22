@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-using RT.Util.Serialization;
+﻿using System;
+using System.Collections.Generic;
+using RT.Serialization;
 
 namespace Timwi.Rank
 {
@@ -10,10 +11,15 @@ namespace Timwi.Rank
         public bool Finished;
     }
 
-    sealed class RankComparison
+    struct RankComparison : IEquatable<RankComparison>
     {
-        public int Less;
-        public int More;
+        public int Less { get; private set; }
+        public int More { get; private set; }
+
+        public RankComparison(int less, int more) { Less = less; More = more; }
+
+        public bool Equals(RankComparison other) => other.Less == Less && other.More == More;
+        public override int GetHashCode() => Less * 257 + More;
     }
 
     sealed class RankRanking
@@ -26,7 +32,7 @@ namespace Timwi.Rank
         public bool Finished;
 
         [ClassifyNotNull]
-        public List<RankComparison> Comparisons = new List<RankComparison>();
+        public HashSet<RankComparison> Comparisons = new HashSet<RankComparison>();
         [ClassifyNotNull]
         public List<int> Ignore = new List<int>();
 
